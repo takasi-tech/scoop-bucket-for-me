@@ -26,20 +26,29 @@
     "installer": {
         "script": [
             "cd $dir",
+            "Write-Output \"[installer] Registering context menu\"",
             "Cmd.exe /C Call RegisterPerUser.bat /s",
+            "Write-Output \"[installer] Registering context menu for Windows 11\"",
             "Add-AppxPackage WinMergeContextMenuPackage.msix -ExternalLocation $dir",
             "cd (Split-Path $dir)"
         ]
     },
     "pre_uninstall": [
         "cd $dir",
+        "Write-Output \"[pre_uninstall] Unregistering context menu for Windows 11\"",
         "Get-AppxPackage -name WinMerge | Remove-AppxPackage",
+        "Write-Output \"[pre_uninstall] Unregistering context menu\"",
         "Cmd.exe /C Call RegisterPerUser.bat /u /s",
         "cd (Split-Path $dir)"
     ],
-    "post_uninstall": [
-        "Get-ChildItem \"$dir\\*\" -File -Recurse | ForEach-Object { Remove-Item $_.FullName -Force }"
-    ],
+    "uninstaller": {
+        "script": [
+            "if (Test-Path \"$dir\" -PathType Container) {",
+            "  Write-Output \"[uninstaller] Remove files\"",
+            "  Get-ChildItem \"$dir\\*\" -File -Recurse | ForEach-Object { Remove-Item $_.FullName -Force }",
+            "}"
+        ]
+    },
     "shortcuts": [
         [
             "WinMergeU.exe",
