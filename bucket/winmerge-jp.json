@@ -27,13 +27,18 @@
         "script": [
             "cd $dir",
             "Cmd.exe /C Call RegisterPerUser.bat /s",
-            "Add-AppxPackage WinMergeContextMenuPackage.msix -ExternalLocation $dir"
+            "Add-AppxPackage WinMergeContextMenuPackage.msix -ExternalLocation $dir",
+            "cd (Split-Path $dir)"
         ]
     },
     "pre_uninstall": [
         "cd $dir",
         "Get-AppxPackage -name WinMerge | Remove-AppxPackage",
-        "Cmd.exe /C Call RegisterPerUser.bat /u /s"
+        "Cmd.exe /C Call RegisterPerUser.bat /u /s",
+        "cd (Split-Path $dir)"
+    ],
+    "post_uninstall": [
+        "Get-ChildItem \"$dir\\*\" -File -Recurse | ForEach-Object { Remove-Item $_.FullName -Force }"
     ],
     "shortcuts": [
         [
