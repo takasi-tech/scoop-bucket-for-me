@@ -1,11 +1,11 @@
 {
     "architecture": {
         "64bit": {
-            "url": "https://download.sourceforge.net/winmerge-v2-jp/winmerge-2.16.36-jp-2-x64-exe.zip",
-            "hash": "63fb00883b71efa51c9b1da85fca87407cb26aebfa4dfb1eb873be08199542e9"
+            "url": "https://download.sourceforge.net/winmerge-v2-jp/winmerge-2.16.6-jp-2-x64-exe.zip",
+            "hash": "fff"
         }
     },
-    "version": "2.16.36.2",
+    "version": "2.16.6-jp-2",
     "extract_dir": "WinMerge",
     "bin": "WinMergeU.exe",
     "persist": [
