@@ -1,0 +1,39 @@
+{
+    //"depends": "",
+    //"url": "https://download.sourceforge.net/winmerge-v2-jp/winmerge-2.16.36-jp-2-x64-exe.zip",
+    "architecture": {
+        "64bit": {
+            "url": "https://download.sourceforge.net/winmerge-v2-jp/winmerge-2.16.36-jp-2-x64-exe.zip"
+            //"hash": "fbd097903585b83ed252e7ed8188539432dd0607335b377eb916df7d244be128"
+        }
+    },
+    "version": "2.16.36-jp-2",
+    "extract_dir": "WinMerge",
+    "bin": "WinMergeU.exe",
+    //"hash": "",
+    "pre_install": [
+        "$NeedInstallGSudo = $True",
+        "scoop list | ForEach-Object { if ($_.Name -eq \"gsudo\") { $NeedInstallGSudo = $False } } | Out-Null",
+        "if ($NeedInstallGSudo) { scoop install gsudo }"
+    ],
+    "installer": {
+        "script": [
+            "cd $dir",
+            "Cmd.exe /C Call RegisterPerUser.bat",
+            "Add-AppxPackage WinMergeContextMenuPackage.msix -ExternalLocation $dir"
+        ]
+    },
+    "pre_uninstall": [
+        "cd $dir",
+        "Get-AppxPackage -name WinMerge | Remove-AppxPackage",
+        "Cmd.exe /C Call RegisterPerUser.bat /u"
+    ],
+    "shortcuts": [
+        [
+            "WinMergeU.exe",
+            "WinMerge"
+        ]
+    ],
+    //"license": "",
+    "homepage": "https://winmergejp.bitbucket.io/"
+}
