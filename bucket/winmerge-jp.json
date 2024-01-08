@@ -15,36 +15,36 @@
     "pre_install": [
         "$ScoopPreservedDirPath = \"$env:TEMP\\__scoop__preserved\"",
         "if (Test-Path $ScoopPreservedDirPath -PathType Container) {",
-        "  Write-Output \"[pre_install] Removing temporary preserved folder\"",
+        "  Write-Output \"  [pre_install] Removing temporary preserved folder\"",
         "  Remove-Item $ScoopPreservedDirPath -Recurse -Force",
         "}",
-        "Write-Output \"[pre_install] Creating temporary preserved folder\"",
+        "Write-Output \"  [pre_install] Creating temporary preserved folder\"",
         "New-Item $ScoopPreservedDirPath -ItemType Directory | Out-Null",
-        "Write-Output \"[pre_install] Preserving original files\"",
+        "Write-Output \"  [pre_install] Preserving original files\"",
         "Copy-Item \"$dir\\*\" $ScoopPreservedDirPath -Recurse -Force"
     ],
     "installer": {
         "script": [
-            "cd $dir",
-            "Write-Output \"[installer] Registering context menu\"",
+            "Push-Location $dir",
+            "Write-Output \"  [installer] Registering context menu\"",
             "Cmd.exe /C Call RegisterPerUser.bat /s",
-            "Write-Output \"[installer] Registering context menu for Windows 11\"",
+            "Write-Output \"  [installer] Registering context menu for Windows 11\"",
             "Add-AppxPackage WinMergeContextMenuPackage.msix -ExternalLocation $dir",
-            "cd (Split-Path $dir)"
+            "Pop-Location"
         ]
     },
     "pre_uninstall": [
-        "cd $dir",
-        "Write-Output \"[pre_uninstall] Unregistering context menu for Windows 11\"",
+        "Push-Location $dir",
+        "Write-Output \"  [pre_uninstall] Unregistering context menu for Windows 11\"",
         "Get-AppxPackage -name WinMerge | Remove-AppxPackage",
-        "Write-Output \"[pre_uninstall] Unregistering context menu\"",
+        "Write-Output \"  [pre_uninstall] Unregistering context menu\"",
         "Cmd.exe /C Call RegisterPerUser.bat /u /s",
-        "cd (Split-Path $dir)"
+        "Pop-Location"
     ],
     "uninstaller": {
         "script": [
             "if (Test-Path \"$dir\" -PathType Container) {",
-            "  Write-Output \"[uninstaller] Remove files\"",
+            "  Write-Output \"  [uninstaller] Remove files\"",
             "  Get-ChildItem \"$dir\\*\" -File -Recurse | ForEach-Object { Remove-Item $_.FullName -Force }",
             "}"
         ]
